@@ -54,6 +54,10 @@ def url(text, url):
     keyboard.add(types.InlineKeyboardButton(text=text, url=url))
     return keyboard
 
+def phone_number(text):
+    keyboard = types.reply_keyboard.ReplyKeyboardMarkup(one_time_keyboard = True, resize_keyboard = True)
+    keyboard.add(types.reply_keyboard.KeyboardButton(text=text, request_contact=True))
+    return keyboard
 
 def inline(array, callback = None):
     array = to2Array(array)
