@@ -8,11 +8,17 @@ class Database():
 		self.cur = self.conn.cursor()
 
 	def query(self, query, args = None):
+		need_commit = False
+		if "create" in query.lower(): need_commit = True
+		if "insert" in query.lower(): need_commit = True
+		if "delete" in query.lower(): need_commit = True
+
 		if args:
 			self.cur.execute(query, args)
 		else:
 			self.cur.execute(query)
 
+		if need_commit: self.commit()
 
 	def close(self):
 		self.cur.close()
