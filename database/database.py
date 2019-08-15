@@ -12,6 +12,7 @@ class Database():
 		if "create" in query.lower(): need_commit = True
 		if "insert" in query.lower(): need_commit = True
 		if "delete" in query.lower(): need_commit = True
+		if "update" in query.lower(): need_commit = True
 
 		if args:
 			self.cur.execute(query, args)
