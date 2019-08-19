@@ -20,7 +20,7 @@ async def welcome_message(message: types.Message):
     func.column_add(message.chat.id, "state", 1234)
     await message.reply("Добро пожаловать!\nПеред Вами *сервис доставки еды на дом*.", reply = False, parse_mode=ParseMode.MARKDOWN)
     await full_name_request(message)
-    
+
 @dp.message_handler(lambda message: func.column_take(message.chat.id, "state") == 1234, commands=['start'])
 async def full_name_request(message: types.Message):
     full_name = func.check_full_name(message.chat.first_name + " " + message.chat.last_name) if "last_name" in message.chat else None
@@ -72,14 +72,15 @@ async def text_message(message: types.Message):
     await bot.send_message(message.chat.id, message.text, reply_markup=keyboard.reply([["📄 Меню", "🍱 Корзина"], ["👤 Профиль", "💬 Помощь"]] ))
 
 
-@dp.callback_query_handler(lambda callback_query: "#setstate@1235" in callback_query.data and func.column_take(callback_query.message.chat.id, "state") == 1234)
+@dp.callback_query_handler(lambda callback_query: "#setstate@1235" in callback_query.data)
 async def take_phone_callback(callback: types.CallbackQuery):
     message = callback.message; await callback.answer()
-    full_name = func.check_full_name(message.chat.first_name + " " + message.chat.last_name)
-    first_name, last_name = full_name
-    func.column_add(message.chat.id, "first_name", first_name)
-    func.column_add(message.chat.id, "last_name", last_name)
-    await take_phone(message)
+    if func.column_take(message.chat.id, "state") == 1234:
+        full_name = func.check_full_name(message.chat.first_name + " " + message.chat.last_name)
+        first_name, last_name = full_name
+        func.column_add(message.chat.id, "first_name", first_name)
+        func.column_add(message.chat.id, "last_name", last_name)
+        await take_phone(message)
 
 async def take_phone(message: types.Message):
     func.column_add(message.chat.id, "state", 1235)
