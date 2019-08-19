@@ -42,6 +42,11 @@ async def welcome_again(message: types.Message):
 # async def process_help_command(message: types.Message):
 #     await message.reply("Напиши мне что-нибудь, и я отправлю этот текст тебе в ответ!")
 
+@dp.message_handler(commands=['delete'])
+async def process_help_command(message: types.Message):
+    func.chat_id_del(message.chat.id)
+    await message.reply("Данные о Вас удалены!")
+
 @dp.message_handler(content_types=ContentTypes.CONTACT)
 async def get_contact(message: types.Message):
     if func.column_take(message.chat.id, "state") != 1235: return 0
@@ -67,7 +72,7 @@ async def text_message(message: types.Message):
     await bot.send_message(message.chat.id, message.text, reply_markup=keyboard.reply([["📄 Меню", "🍱 Корзина"], ["👤 Профиль", "💬 Помощь"]] ))
 
 
-@dp.callback_query_handler(lambda callback_query: "#setstate@1235" in callback_query.data and func.column_take(message.chat.id, "state") == 1234)
+@dp.callback_query_handler(lambda callback_query: "#setstate@1235" in callback_query.data and func.column_take(callback_query.message.chat.id, "state") == 1234)
 async def take_phone_callback(callback: types.CallbackQuery):
     message = callback.message; await callback.answer()
     full_name = func.check_full_name(message.chat.first_name + " " + message.chat.last_name)

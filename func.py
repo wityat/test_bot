@@ -51,6 +51,7 @@ if __name__ == '__main__':
     chat_id_del(446162145)
     chat_id_del(385778185)
     chat_id_del(192507315)
+    chat_id_del(349441425)
 
     # print(chat_id_found(1231))
     # print(chat_id_add(1231))
